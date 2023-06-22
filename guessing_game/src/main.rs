@@ -1,8 +1,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 use rand::Rng;
-use std::cmp::Ordering;
-use std::{io, print, println};
+use std::{cmp::Ordering, io, print, println};
 
 // The main guessing game function
 fn _guessing_game() {
@@ -20,7 +19,8 @@ fn _guessing_game() {
     print!("You guessed: {guess}");
 
     //When a function returns a result (a type of enum) it can be handled
-    //using a except or using a match that compares the the individual values
+    //using a except or using a match (match can run diffrent code depending
+    //on the result) that compares the the individual values
     //inside the enum and proceeds with the execution accordingly
     let guess: u32 = match guess.trim().parse() {
       Ok(num) => num,
@@ -58,37 +58,78 @@ fn _split_string(s: &mut String) -> Vec<&str> {
   return vector;
 }
 
+// fibonacci series
+fn _fibonacci(n: u32) -> u32 {
+  if n <= 2 {
+    return n - 1;
+  }
+  return _fibonacci(n - 1) + _fibonacci(n - 2);
+}
+
 //Trying stuff
 #[derive(Debug)]
-struct Person {
+struct _Person {
   name: String,
   age: u8,
   email: String,
 }
 
-impl Person {
+impl _Person {
   fn update(&mut self) {
     self.name = String::from("Not Vedant");
   }
+}
 
-  fn display_struct(&self) {
-    println!("Name: {}", self.name);
-    println!("Age: {}", self.age);
-    println!("Email: {}", self.email);
-    println!()
+#[derive(Debug)]
+enum _Message {
+  Quit,
+  Move { x: i32, y: i32 },
+  Write(String),
+  ChangeColor(i32, i32, i32),
+}
+
+impl _Message {
+  fn call(&self) {
+    println!("{:?}", self);
+  }
+}
+
+#[derive(Debug)] // so we can inspect the state in a minute
+enum UsState {
+  Alabama,
+  Alaska,
+}
+
+#[derive(Debug)]
+enum Coin {
+  Penny(UsState, i32),
+  Nickel(UsState, i32),
+  Dime(UsState, i32),
+  Quarter(UsState, i32),
+}
+
+fn _value_in_cents(coin: Coin) -> (UsState, i32) {
+  match coin {
+    Coin::Penny(state, ammount) => {
+      println!("{:?} {:?}", state, ammount);
+      (state, ammount)
+    }
+    Coin::Nickel(state, ammount) => {
+      println!("{:?} {:?}", state, 5 * ammount);
+      (state, 5 * ammount)
+    }
+    Coin::Dime(state, ammount) => {
+      println!("{:?} {:?}", state, 10 * ammount);
+      (state, 10 * ammount)
+    }
+    Coin::Quarter(state, ammount) => {
+      println!("{:?} {:?}", state, 25 * ammount);
+      (state, 25 * ammount)
+    }
   }
 }
 
 fn main() {
-  let mut p = Person {
-    name: String::from("Vedant"),
-    age: 20,
-    email: String::from("a@b.com"),
-  };
-  let mut vector: Vec<i32> = Vec::new();
-  vector.push(9);
-  println!("{:#?}", &p);
-  p.display_struct();
-  p.update();
-  p.display_struct();
+  let th: Coin = Coin::Penny(UsState::Alabama, 5);
+  println!("{:?}", th);
 }
